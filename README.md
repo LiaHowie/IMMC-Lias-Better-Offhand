@@ -17,6 +17,7 @@ This applies to:
 
 Optional features:
 - **No Offhand Light Placement:** disables the placement of light-emitting items in your offhand, such as torches, lanterns, etc.
+- **No Offhand Item Frame Placement**: disables the placement of items in item frames from your offhand
 
 Known limitations:
 - Instant use items detection (e.g. throwing the last snowball in a stack) rely on the stack size changing, or specific item names and types. If a mod adds an instant-use item that doesn't reduce stack size, or isn't in the type list, it may not be caught.
