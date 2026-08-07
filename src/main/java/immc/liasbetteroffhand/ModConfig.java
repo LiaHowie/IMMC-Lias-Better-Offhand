@@ -13,6 +13,9 @@ public class ModConfig implements ConfigData {
 	@ConfigEntry.Gui.Tooltip()
     public boolean noOffhandLightPlacement = false;
 
+    @ConfigEntry.Gui.Tooltip()
+    public boolean noItemFramePlacement = false;
+
     @ConfigEntry.Gui.CollapsibleObject
     public DebugConfig debugMode = new DebugConfig();
     public static class DebugConfig implements ConfigData {

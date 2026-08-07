@@ -4,14 +4,21 @@ package immc.liasbetteroffhand.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -151,9 +158,9 @@ public class OffhandUseMixin {
 
 		// If the player has leashed animals, a block interaction is likely attaching a lead to a fence post
 		boolean clickingFencePost = player.level().getBlockState(hitResult.getBlockPos())
-			.is(net.minecraft.tags.BlockTags.FENCES);
+			.is(BlockTags.FENCES);
 		boolean hasLeashedEntities = player.level().getEntitiesOfClass(
-			net.minecraft.world.entity.Mob.class,
+			Mob.class,
 			player.getBoundingBox().inflate(10),
 			mob -> mob.getLeashHolder() == player
 		).size() > 0;
@@ -167,12 +174,12 @@ public class OffhandUseMixin {
 		// Since the success of using bone meal use, axe log stripping, etc is handeled server side, the client will try and trigger the offhand in the same tick
 		// So this check disables the offhand regardless of if the item was actually used or not
 		// However don't do this if the offhand item is a shield, as it inteferes with vanilla behaviour and disables all right click functionality
-		if ((player.getMainHandItem().is(net.minecraft.tags.ItemTags.AXES)
-				|| player.getMainHandItem().is(net.minecraft.tags.ItemTags.SHOVELS)
-				|| player.getMainHandItem().is(net.minecraft.tags.ItemTags.HOES)
-				|| player.getMainHandItem().is(net.minecraft.world.item.Items.SHEARS)
-				|| player.getMainHandItem().is(net.minecraft.world.item.Items.FLINT_AND_STEEL)
-				|| player.getMainHandItem().is(net.minecraft.world.item.Items.BONE_MEAL))
+		if ((player.getMainHandItem().is(ItemTags.AXES)
+				|| player.getMainHandItem().is(ItemTags.SHOVELS)
+				|| player.getMainHandItem().is(ItemTags.HOES)
+				|| player.getMainHandItem().is(Items.SHEARS)
+				|| player.getMainHandItem().is(Items.FLINT_AND_STEEL)
+				|| player.getMainHandItem().is(Items.BONE_MEAL))
 				&& !(player.getOffhandItem().getItem() instanceof net.minecraft.world.item.ShieldItem)) {
 			mainHandUseItemOnThisTick = true;
 			blockOffhandUse = true; // Set blockOffHandUse to true to ensure that the offhand can't be used until right click is let go
@@ -185,9 +192,9 @@ public class OffhandUseMixin {
 		at = @At("TAIL")
 	)
 	private void checkMainHandEntityInter(
-		net.minecraft.world.entity.player.Player player,
-		net.minecraft.world.entity.Entity entity,
-		net.minecraft.world.phys.EntityHitResult hitResult,
+		Player player,
+		Entity entity,
+		EntityHitResult hitResult,
 		InteractionHand hand,
 		CallbackInfoReturnable<InteractionResult> cir
 	) {
@@ -250,6 +257,29 @@ public class OffhandUseMixin {
 			debugMsg("Offhand Light Placement Blocked");
 		} else if (blockOffhandUse || mainHandUseItemOnThisTick || mainHandEntityInterThisTick) {
 			cir.setReturnValue(InteractionResult.PASS);
+		}
+	}
+
+	// Block the offhand from placing an item into an item frame if the config option is enabled
+	@Inject(
+		method = "interact",
+		at = @At("HEAD"),
+		cancellable = true
+	)
+	private void preventOffhandItemFramePlacement(
+		Player player,
+		Entity entity,
+		EntityHitResult hitResult,
+		InteractionHand hand,
+		CallbackInfoReturnable<InteractionResult> cir
+	) {
+		if (hand != InteractionHand.OFF_HAND) return;
+
+		if (ModConfig.get().noItemFramePlacement
+				&& entity instanceof ItemFrame
+				&& !player.getOffhandItem().isEmpty()) {
+			cir.setReturnValue(InteractionResult.FAIL);
+			debugMsg("Offhand Item Frame Placement Blocked");
 		}
 	}
 }
