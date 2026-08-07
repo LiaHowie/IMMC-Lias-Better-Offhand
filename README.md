@@ -17,6 +17,7 @@ This applies to:
 
 Optional features:
 - **No Offhand Light Placement:** disables the placement of light-emitting items in your offhand, such as torches, lanterns, etc.
+- **No Offhand Item Frame Placement**: disables the placement of items in item frames from your offhand
 
 Known limitations:
 - Instant use items detection (e.g. throwing the last snowball in a stack) rely on the stack size changing, or specific item names and types. If a mod adds an instant-use item that doesn't reduce stack size, or isn't in the type list, it may not be caught.
@@ -39,7 +40,7 @@ Contributions are more than welcome! Please make this better! If you find anythi
 
 ### Current Contributions
 **[nco2k](https://github.com/nco2k):** 
-- [![v1.2.0](https://img.shields.io/badge/v1.2.0-grey?style=flat-square&logo=github)](https://github.com/LiaHowie/immc-liasbetteroffhand/releases/tag/1.2.0) Added the no offhand light placement optional feature 
-- [![v1.2.0](https://img.shields.io/badge/v1.2.0-grey?style=flat-square&logo=github)](https://github.com/LiaHowie/immc-liasbetteroffhand/releases/tag/1.2.0) Introduced config setting tooltips
-- [![v1.2.0](https://img.shields.io/badge/v1.2.0-grey?style=flat-square&logo=github)](https://github.com/LiaHowie/immc-liasbetteroffhand/releases/tag/1.2.0) Broadened version compatibility to both 26.1.* and 26.2.*
+- [![v1.2.0](https://img.shields.io/badge/v1.2.0-grey?style=flat-square&logo=github)](https://github.com/LiaHowie/IMMC-Lias-Better-Offhand/releases/tag/1.2.0) Added the no offhand light placement optional feature 
+- [![v1.2.0](https://img.shields.io/badge/v1.2.0-grey?style=flat-square&logo=github)](https://github.com/LiaHowie/IMMC-Lias-Better-Offhand/releases/tag/1.2.0) Introduced config setting tooltips
+- [![v1.2.0](https://img.shields.io/badge/v1.2.0-grey?style=flat-square&logo=github)](https://github.com/LiaHowie/IMMC-Lias-Better-Offhand/releases/tag/1.2.0) Broadened version compatibility to both 26.1.* and 26.2.*
 
